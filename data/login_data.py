@@ -1,0 +1,2 @@
+LOGIN = "ninja"
+PASSWORD = "1234"
