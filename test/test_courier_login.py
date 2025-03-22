@@ -2,6 +2,7 @@ import allure
 from conftest import *
 from data.response_codes import *
 from data.login_data import *
+from data.login_courier import login_courier
 
 
 class TestCourierLogin:
@@ -13,7 +14,7 @@ class TestCourierLogin:
         response = login_courier(login, password)
         assert response.status_code == 200, f"Ожидался статус-код 200, но получен {response.status_code}"
         assert 'id' in response.json(), "В ответе нет поля 'id'"
-        print(f"Авторизация успешна! ID: {response.json()['id']}")
+
 
     @allure.title("Проверяем, что курьер не может авторизоваться без обязательных полей (логин или пароль)")
     def test_missing_login_or_password(self):
@@ -24,7 +25,7 @@ class TestCourierLogin:
         response = requests.post(login_url, json=payload)
         assert response.status_code == 400
         assert response.json().get("message") == error_message_missing_fields
-        print(f"Ошибка: {error_message_missing_fields}")
+
 
     @allure.title("Проверяем, что система вернёт ошибку, если неправильно указать логин или пароль")
     def test_wrong_login_or_password(self):
@@ -33,7 +34,7 @@ class TestCourierLogin:
         response = login_courier(login, password)
         assert response.status_code == 400
         assert response.json().get("message") == error_message_wrong_credentials
-        print(f"Ошибка: {error_message_wrong_credentials}")
+
 
     @allure.title("Проверяем, что если авторизоваться под несуществующим пользователем, запрос возвращает ошибку")
     def test_missing_login(self):
@@ -44,7 +45,7 @@ class TestCourierLogin:
         response = requests.post(login_url, json=payload)
         assert response.status_code == 400
         assert response.json().get("message") == error_message_missing_fields
-        print(f"Ошибка: {error_message_missing_fields}")
+
 
     @allure.title("Проверяем, что если авторизоваться под несуществующим пользователем, запрос возвращает ошибку")
     def test_missing_password(self):
@@ -55,7 +56,7 @@ class TestCourierLogin:
         response = requests.post(login_url, json=payload)
         assert response.status_code == 400
         assert response.json().get("message") == error_message_missing_fields
-        print(f"Ошибка: {error_message_missing_fields}")
+
 
     @allure.title("Проверяем, что если авторизоваться под несуществующим пользователем, запрос возвращает ошибку")
     def test_non_existent_user(self):
@@ -64,7 +65,7 @@ class TestCourierLogin:
         response = login_courier(login, password)
         assert response.status_code == 400
         assert response.json().get("message") == error_message_non_existent_user
-        print(f"Ошибка: {error_message_non_existent_user}")
+
 
     @allure.title("Проверяем, что успешный запрос возвращает id.")
     def test_successful_login_returns_id(self):
@@ -73,4 +74,3 @@ class TestCourierLogin:
         response = login_courier(login, password)
         assert response.status_code == 200
         assert 'id' in response.json(), "В ответе нет поля 'id'"
-        print(f"Успешная авторизация! Получен ID: {response.json()['id']}")

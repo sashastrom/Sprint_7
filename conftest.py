@@ -1,20 +1,7 @@
 import pytest
 import requests
-import random
-import string
+from data.helpers import generate_random_string
 from data.urls import *
-
-
-
-def login_courier(login, password):
-    payload = {"login": login, "password": password}
-    response = requests.post(login_url, json=payload)
-    return response
-
-
-def generate_random_string(length):
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(length))
 
 
 @pytest.fixture
@@ -48,8 +35,3 @@ def register_new_courier():
         delete_response = requests.delete(delete_courier)
         if delete_response.status_code != 200:
             print(f"Ошибка при удалении курьера: {delete_response.status_code} - {delete_response.json()}")
-
-
-def create_order(payload):
-    response = requests.post(order_url, json=payload)
-    return response

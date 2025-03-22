@@ -1,5 +1,6 @@
 import allure
 from conftest import *
+from data.orders import create_order
 
 class TestOrderCreation:
 
@@ -41,4 +42,3 @@ class TestOrderCreation:
         # Проверяем что есть поле track
         response_json = response.json()
         assert "track" in response_json, f"Expected 'track' field in response, but got {response_json}"
-        print(f"Order created successfully with track: {response_json['track']}")
